@@ -51,32 +51,50 @@ productForm.addEventListener("submit", function (e) {
 // Render Table
 function renderTable(filter = "") {
     inventoryTable.innerHTML = "";
+
+    const matches = [];
     products.forEach((product, index) => {
-        // Show "No products found" if table is empty
-        if (inventoryTable.rows.length === 0) {
-            const row = inventoryTable.insertRow();
-            row.innerHTML = `<td colspan="5" style="text-align:center; color:#ff4d4d;">No products found.</td>`;
+        if (product.name.toLowerCase().includes(filter) || product.category.toLowerCase().includes(filter)) {
+            matches.push({ product, index });
         }
-        else if (product.name.toLowerCase().includes(filter) || product.category.toLowerCase().includes(filter)) {
+    });
+
+    if (matches.length === 0) {
+        // show message ONLY if user searched something
+        if (filter.length > 0) {
             const row = inventoryTable.insertRow();
-            row.innerHTML = `<td>${product.name}</td><td>${product.category}</td>
+            row.innerHTML = `<td colspan="5" style="text-align:center; color:#ff4d4d; font-weight:bold;">No products found.</td>`;
+        }
+        return;
+    }
+
+    matches.forEach(({ product, index }) => {
+        const row = inventoryTable.insertRow();
+        row.innerHTML = `<td>${product.name}</td><td>${product.category}</td>
         <td class="${product.qty < 5 ? 'low-stock' : ''}">${product.qty}</td>
         <td>$${product.price.toFixed(2)}</td>
         <td>
           <button class="btn btn-edit" onclick="editProduct(${index})"><i class="fas fa-edit"></i></button>
           <button class="btn btn-delete" onclick="deleteProduct(${index})"><i class="fas fa-trash-alt"></i></button>
         </td>`;
-        }
-
     });
 }
+
 
 // Render Cards
 function renderCards(filter = "") {
     cardsContainer.innerHTML = "";
+
+    const matches = [];
     products.forEach((product, index) => {
-        // Show "No products found" if no cards
-        if (cardsContainer.children.length === 0) {
+        if (product.name.toLowerCase().includes(filter) || product.category.toLowerCase().includes(filter)) {
+            matches.push({ product, index });
+        }
+    });
+
+    if (matches.length === 0) {
+        // show message ONLY if user searched something
+        if (filter.length > 0) {
             const msg = document.createElement("div");
             msg.style.textAlign = "center";
             msg.style.color = "#ff4d4d";
@@ -85,10 +103,13 @@ function renderCards(filter = "") {
             msg.textContent = "No products found.";
             cardsContainer.appendChild(msg);
         }
-        else if (product.name.toLowerCase().includes(filter) || product.category.toLowerCase().includes(filter)) {
-            const card = document.createElement("div");
-            card.className = "product-card";
-            card.innerHTML = `<h3>${product.name}</h3>
+        return;
+    }
+
+    matches.forEach(({ product, index }) => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `<h3>${product.name}</h3>
         <p><strong>Category:</strong> ${product.category}</p>
         <p><strong>Quantity:</strong> <span class="${product.qty < 5 ? 'low-stock' : ''}">${product.qty}</span></p>
         <p><strong>Price:</strong> $${product.price.toFixed(2)}</p>
@@ -96,11 +117,10 @@ function renderCards(filter = "") {
           <button class="btn btn-edit" onclick="editProduct(${index})"><i class="fas fa-edit"></i></button>
           <button class="btn btn-delete" onclick="deleteProduct(${index})"><i class="fas fa-trash-alt"></i></button>
         </div>`;
-            cardsContainer.appendChild(card);
-        }
-
+        cardsContainer.appendChild(card);
     });
 }
+
 
 // Edit/Delete
 function editProduct(index) {
