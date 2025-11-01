@@ -52,7 +52,12 @@ productForm.addEventListener("submit", function (e) {
 function renderTable(filter = "") {
     inventoryTable.innerHTML = "";
     products.forEach((product, index) => {
-        if (product.name.toLowerCase().includes(filter) || product.category.toLowerCase().includes(filter)) {
+        // Show "No products found" if table is empty
+        if (inventoryTable.rows.length === 0) {
+            const row = inventoryTable.insertRow();
+            row.innerHTML = `<td colspan="5" style="text-align:center; color:#ff4d4d;">No products found.</td>`;
+        }
+        else if (product.name.toLowerCase().includes(filter) || product.category.toLowerCase().includes(filter)) {
             const row = inventoryTable.insertRow();
             row.innerHTML = `<td>${product.name}</td><td>${product.category}</td>
         <td class="${product.qty < 5 ? 'low-stock' : ''}">${product.qty}</td>
@@ -62,11 +67,6 @@ function renderTable(filter = "") {
           <button class="btn btn-delete" onclick="deleteProduct(${index})"><i class="fas fa-trash-alt"></i></button>
         </td>`;
         }
-        // Show "No products found" if table is empty
-        if (inventoryTable.rows.length === 0) {
-            const row = inventoryTable.insertRow();
-            row.innerHTML = `<td colspan="5" style="text-align:center; color:#ff4d4d;">No products found.</td>`;
-        }
 
     });
 }
@@ -75,7 +75,17 @@ function renderTable(filter = "") {
 function renderCards(filter = "") {
     cardsContainer.innerHTML = "";
     products.forEach((product, index) => {
-        if (product.name.toLowerCase().includes(filter) || product.category.toLowerCase().includes(filter)) {
+        // Show "No products found" if no cards
+        if (cardsContainer.children.length === 0) {
+            const msg = document.createElement("div");
+            msg.style.textAlign = "center";
+            msg.style.color = "#ff4d4d";
+            msg.style.fontWeight = "bold";
+            msg.style.marginTop = "20px";
+            msg.textContent = "No products found.";
+            cardsContainer.appendChild(msg);
+        }
+        else if (product.name.toLowerCase().includes(filter) || product.category.toLowerCase().includes(filter)) {
             const card = document.createElement("div");
             card.className = "product-card";
             card.innerHTML = `<h3>${product.name}</h3>
@@ -87,16 +97,6 @@ function renderCards(filter = "") {
           <button class="btn btn-delete" onclick="deleteProduct(${index})"><i class="fas fa-trash-alt"></i></button>
         </div>`;
             cardsContainer.appendChild(card);
-        }
-        // Show "No products found" if no cards
-        if (cardsContainer.children.length === 0) {
-            const msg = document.createElement("div");
-            msg.style.textAlign = "center";
-            msg.style.color = "#ff4d4d";
-            msg.style.fontWeight = "bold";
-            msg.style.marginTop = "20px";
-            msg.textContent = "No products found.";
-            cardsContainer.appendChild(msg);
         }
 
     });
