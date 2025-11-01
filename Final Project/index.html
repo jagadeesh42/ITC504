@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Inventory</h2>
+        <ul>
+            <li onclick="openTab('aboutTab')"><i class="fas fa-info-circle"></i> About</li>
+            <li onclick="openTab('viewTab')"><i class="fas fa-box"></i> View Products</li>
+            <li onclick="openTab('addTab')"><i class="fas fa-plus"></i> Add Product</li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Inventory Management Dashboard</h1>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('aboutTab')">About</button>
+            <button class="tab-btn" onclick="openTab('viewTab')">View Products</button>
+            <button class="tab-btn" onclick="openTab('addTab')">Add Product</button>
+        </div>
+
+        <!-- About Tab -->
+        <div id="aboutTab" class="tab-content active">
+            <div class="about-content">
+                <h2>About This Dashboard</h2>
+                <p>This web-based Inventory Management System allows users to manage products efficiently. You can:</p>
+                <ul>
+                    <li>Add, edit, and delete products.</li>
+                    <li>Track stock levels and get alerts for low stock items.</li>
+                    <li>Search and filter products easily.</li>
+                    <li>Export inventory data to CSV for reporting.</li>
+                    <li>View products in both table and card formats for convenience.</li>
+                </ul>
+                <p>This dashboard is designed to provide a clean, professional interface suitable for IR and enterprise
+                    environments.</p>
+            </div>
+        </div>
+
+        <!-- View Products Tab -->
+        <div id="viewTab" class="tab-content">
+            <input type="text" id="searchInput" placeholder="Search product or category..." class="search-bar">
+            <table id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="cardsContainer" class="cards-container"></div>
+        </div>
+
+        <!-- Add Product Tab -->
+        <div id="addTab" class="tab-content">
+            <form id="productForm" class="product-form">
+                <input type="text" id="productName" placeholder="Product Name" required>
+                <input type="number" id="productQty" placeholder="Quantity" min="0" required>
+                <input type="number" id="productPrice" placeholder="Price" min="0" required>
+                <select id="productCategory" required>
+                    <option value="">Select Category</option>
+                    <option>Electronics</option>
+                    <option>Clothing</option>
+                    <option>Stationery</option>
+                    <option>Food</option>
+                </select>
+                <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Product</button>
+            </form>
+            <button class="btn btn-export" id="exportBtn"><i class="fas fa-file-csv"></i> Export CSV</button>
+        </div>
+
+
+
+        <!-- Footer -->
+        <footer>
+            <p>Designed by Jagadeesh Dhulipudi | Instructor: Ayotuyi Tosin Akinola</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

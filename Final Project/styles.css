@@ -1,0 +1,285 @@
+/* Body & Background */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  background: #1e1e2f url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: rgba(37,35,56,0.95);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #667eea;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 15px 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.sidebar ul li i {
+  margin-right: 10px;
+  color: #667eea;
+}
+
+.sidebar ul li:hover {
+  background: rgba(59,59,92,0.8);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 30px 40px;
+  background: rgba(30,30,47,0.9);
+  border-radius: 12px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Heading */
+h1 {
+  margin-top: 0;
+  color: #667eea;
+  font-size: 2rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+  background: #2b2b44;
+  color: #fff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin-right: 5px;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.tab-btn.active {
+  background: #667eea;
+  color: #fff;
+}
+
+.tab-btn:hover {
+  background: #5a67d8;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Search Bar */
+.search-bar {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+  background: #2b2b44;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.search-bar::placeholder {
+  color: #bbb;
+}
+
+/* Product Form */
+.product-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.product-form input, .product-form select {
+  flex: 1 1 200px;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #2b2b44;
+  color: #fff;
+}
+
+.product-form button {
+  flex: 1 1 150px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #667eea;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.product-form button:hover {
+  background: #5a67d8;
+}
+
+/* Export Button */
+.btn-export {
+  background: #44bd32;
+  margin-bottom: 25px;
+}
+
+.btn-export:hover {
+  background: #3b9b28;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  background: #2b2b44;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table th, table td {
+  padding: 12px;
+  text-align: center;
+}
+
+table th {
+  background: #667eea;
+}
+
+table tbody tr:nth-child(even) {
+  background: #343454;
+}
+
+table tbody tr:hover {
+  background: #3b3b5c;
+}
+
+.low-stock {
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+/* Action Buttons */
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  color: #fff;
+}
+
+.btn-edit {
+  background: #fbc531;
+}
+
+.btn-edit:hover {
+  background: #e1ac29;
+}
+
+.btn-delete {
+  background: #e84118;
+}
+
+.btn-delete:hover {
+  background: #c22f12;
+}
+
+/* Product Cards */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background: #2b2b44;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  transition: 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+}
+
+.product-card h3 {
+  margin-top: 0;
+  color: #667eea;
+}
+
+.card-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* About Tab */
+.about-content {
+  background: rgba(43,43,68,0.8);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.about-content h2 {
+  color: #667eea;
+}
+
+.about-content ul li {
+  margin-bottom: 10px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: auto;
+  padding: 15px 0;
+  color: #bbb;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main-content { padding: 20px; margin: 10px; }
+  .product-form { flex-direction: column; }
+  .product-form button { width: 100%; }
+  .btn-export { width: 100%; }
+}
