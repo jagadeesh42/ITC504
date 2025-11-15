@@ -2,14 +2,25 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inventory Management Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 
 <body>
+    <!-- CENTERED MODAL (for messages) -->
+    <div id="modalOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+        <div class="modal-box" role="document">
+            <div id="modalIcon" class="modal-icon"></div>
+            <div id="modalMessage" class="modal-message">Message</div>
+            <div class="modal-actions">
+                <button id="modalOk" class="btn modal-ok">OK</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>Inventory</h2>
@@ -50,7 +61,7 @@
 
         <!-- View Products Tab -->
         <div id="viewTab" class="tab-content">
-            <input type="text" id="searchInput" placeholder="Search product or category..." class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search product or category..." class="search-bar" />
             <table id="inventoryTable">
                 <thead>
                     <tr>
@@ -69,9 +80,9 @@
         <!-- Add Product Tab -->
         <div id="addTab" class="tab-content">
             <form id="productForm" class="product-form">
-                <input type="text" id="productName" placeholder="Product Name" required>
-                <input type="number" id="productQty" placeholder="Quantity" min="0" required>
-                <input type="number" id="productPrice" placeholder="Price" min="0" required>
+                <input type="text" id="productName" placeholder="Product Name" required />
+                <input type="number" id="productQty" placeholder="Quantity" min="0" required />
+                <input type="number" id="productPrice" placeholder="Price" min="0" required />
                 <select id="productCategory" required>
                     <option value="">Select Category</option>
                     <option>Electronics</option>
@@ -79,12 +90,10 @@
                     <option>Stationery</option>
                     <option>Food</option>
                 </select>
-                <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Product</button>
+                <button type="submit" class="btn"><i class="fas fa-plus"></i> Add / Update Product</button>
             </form>
             <button class="btn btn-export" id="exportBtn"><i class="fas fa-file-csv"></i> Export CSV</button>
         </div>
-
-
 
         <!-- Footer -->
         <footer>

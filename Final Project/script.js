@@ -1,11 +1,40 @@
+const API_BASE = "http://localhost:5000/products";
+
 let products = [];
 let editIndex = -1;
+let editId = null;
 
 const productForm = document.getElementById("productForm");
 const inventoryTable = document.getElementById("inventoryTable").getElementsByTagName("tbody")[0];
 const exportBtn = document.getElementById("exportBtn");
 const searchInput = document.getElementById("searchInput");
 const cardsContainer = document.getElementById("cardsContainer");
+
+// modal elements
+const modalOverlay = document.getElementById("modalOverlay");
+const modalMessage = document.getElementById("modalMessage");
+const modalOk = document.getElementById("modalOk");
+const modalIcon = document.getElementById("modalIcon");
+
+modalOk.addEventListener("click", () => {
+    closeModal();
+});
+
+// open/close modal helpers
+function showModal(message, type = "info") {
+    modalMessage.textContent = message;
+    modalOverlay.classList.remove("hidden");
+    modalOverlay.style.display = "flex";
+    // simple icon style: success / error / info
+    modalIcon.innerHTML = type === "success" ? '<i class="fas fa-check-circle" style="color:#38d39f;font-size:28px"></i>' :
+        type === "error" ? '<i class="fas fa-times-circle" style="color:#ff6b6b;font-size:28px"></i>' :
+            '<i class="fas fa-info-circle" style="color:#67a0ff;font-size:28px"></i>';
+}
+
+function closeModal() {
+    modalOverlay.classList.add("hidden");
+    modalOverlay.style.display = "none";
+}
 
 // Tab switching
 function openTab(tabId) {
@@ -15,14 +44,36 @@ function openTab(tabId) {
     if (tabId === 'viewTab') document.querySelector('.tab-btn[onclick*="viewTab"]').classList.add('active');
     else if (tabId === 'addTab') document.querySelector('.tab-btn[onclick*="addTab"]').classList.add('active');
     else document.querySelector('.tab-btn[onclick*="aboutTab"]').classList.add('active');
+
+    // If switching to view, refresh data
+    if (tabId === 'viewTab') {
+        loadProducts().catch(err => showModal("Failed to load products", "error"));
+    }
 }
 
 // Validation helpers
 function isLetters(str) { return /^[A-Za-z\s]+$/.test(str); }
 function isPositiveNumber(str) { return /^[0-9]+(\.[0-9]+)?$/.test(str); }
 
+// Load products from backend
+async function loadProducts() {
+    try {
+        const res = await fetch(API_BASE);
+        if (!res.ok) throw new Error("Network response not ok");
+        products = await res.json();
+        renderTable();
+        renderCards();
+    } catch (err) {
+        console.error(err);
+        showModal("Unable to fetch products from backend.", "error");
+    }
+}
+
+// initial load (attempt)
+loadProducts();
+
 // Add/Edit Product
-productForm.addEventListener("submit", function (e) {
+productForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const name = document.getElementById("productName").value.trim();
@@ -31,21 +82,43 @@ productForm.addEventListener("submit", function (e) {
     const category = document.getElementById("productCategory").value;
 
     // Validation
-    if (!isLetters(name)) { alert("Product Name must contain letters only!"); return; }
-    if (!isPositiveNumber(qty) || parseFloat(qty) < 0) { alert("Quantity must be a positive number!"); return; }
-    if (!isPositiveNumber(price) || parseFloat(price) < 0) { alert("Price must be a positive number!"); return; }
-    if (category === "") { alert("Please select a category!"); return; }
+    if (!isLetters(name)) { showModal("Product Name must contain letters only!", "error"); return; }
+    if (!isPositiveNumber(qty) || parseFloat(qty) < 0) { showModal("Quantity must be a positive number!", "error"); return; }
+    if (!isPositiveNumber(price) || parseFloat(price) < 0) { showModal("Price must be a positive number!", "error"); return; }
+    if (category === "") { showModal("Please select a category!", "error"); return; }
 
-    if (editIndex >= 0) {
-        products[editIndex] = { name, qty: parseFloat(qty), price: parseFloat(price), category };
-        editIndex = -1;
-    } else {
-        products.push({ name, qty: parseFloat(qty), price: parseFloat(price), category });
+    const payload = { name, qty: parseFloat(qty), price: parseFloat(price), category };
+
+    try {
+        if (editId) {
+            // update
+            const res = await fetch(`${API_BASE}/${editId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            if (!res.ok) throw new Error("Update failed");
+            showModal("Product updated successfully!", "success");
+            editId = null;
+            editIndex = -1;
+        } else {
+            // create
+            const res = await fetch(API_BASE, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            if (!res.ok) throw new Error("Create failed");
+            showModal("Product added successfully!", "success");
+        }
+
+        productForm.reset();
+        await loadProducts();
+        openTab('viewTab');
+    } catch (err) {
+        console.error(err);
+        showModal("Operation failed — check backend console.", "error");
     }
-
-    productForm.reset();
-    renderTable();
-    renderCards();
 });
 
 // Render Table
@@ -60,7 +133,6 @@ function renderTable(filter = "") {
     });
 
     if (matches.length === 0) {
-        // show message ONLY if user searched something
         if (filter.length > 0) {
             const row = inventoryTable.insertRow();
             row.innerHTML = `<td colspan="5" style="text-align:center; color:#ff4d4d; font-weight:bold;">No products found.</td>`;
@@ -80,7 +152,6 @@ function renderTable(filter = "") {
     });
 }
 
-
 // Render Cards
 function renderCards(filter = "") {
     cardsContainer.innerHTML = "";
@@ -93,7 +164,6 @@ function renderCards(filter = "") {
     });
 
     if (matches.length === 0) {
-        // show message ONLY if user searched something
         if (filter.length > 0) {
             const msg = document.createElement("div");
             msg.style.textAlign = "center";
@@ -121,7 +191,6 @@ function renderCards(filter = "") {
     });
 }
 
-
 // Edit/Delete
 function editProduct(index) {
     const product = products[index];
@@ -129,15 +198,25 @@ function editProduct(index) {
     document.getElementById("productQty").value = product.qty;
     document.getElementById("productPrice").value = product.price;
     document.getElementById("productCategory").value = product.category;
-    openTab('addTab');
+    editId = product._id || product.id || null; // support both _id and id
     editIndex = index;
+    openTab('addTab');
+    showModal("Editing product. Make changes and click Save.", "info");
 }
 
-function deleteProduct(index) {
-    if (confirm("Are you sure you want to delete this product?")) {
-        products.splice(index, 1);
-        renderTable();
-        renderCards();
+async function deleteProduct(index) {
+    const ok = confirm("Are you sure you want to delete this product?");
+    if (!ok) return;
+
+    try {
+        const id = products[index]._id || products[index].id;
+        const res = await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("Delete failed");
+        showModal("Product deleted successfully!", "success");
+        await loadProducts();
+    } catch (err) {
+        console.error(err);
+        showModal("Delete failed — check backend.", "error");
     }
 }
 
@@ -151,6 +230,7 @@ exportBtn.addEventListener("click", function () {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    showModal("CSV exported (download should start).", "success");
 });
 
 // Search/filter
@@ -159,7 +239,3 @@ searchInput.addEventListener("input", function () {
     renderTable(filter);
     renderCards(filter);
 });
-
-// Initial render
-renderTable();
-renderCards();

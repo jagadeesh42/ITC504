@@ -12,7 +12,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: 220px;
-  background: rgba(37,35,56,0.95);
+  background: rgba(37, 35, 56, 0.95);
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
@@ -46,14 +46,14 @@ body {
 }
 
 .sidebar ul li:hover {
-  background: rgba(59,59,92,0.8);
+  background: rgba(59, 59, 92, 0.8);
 }
 
 /* Main Content */
 .main-content {
   flex: 1;
   padding: 30px 40px;
-  background: rgba(30,30,47,0.9);
+  background: rgba(30, 30, 47, 0.9);
   border-radius: 12px;
   margin: 20px;
   display: flex;
@@ -126,7 +126,8 @@ h1 {
   margin-bottom: 15px;
 }
 
-.product-form input, .product-form select {
+.product-form input,
+.product-form select {
   flex: 1 1 200px;
   padding: 12px;
   border-radius: 8px;
@@ -171,7 +172,8 @@ table {
   overflow: hidden;
 }
 
-table th, table td {
+table th,
+table td {
   padding: 12px;
   text-align: center;
 }
@@ -231,13 +233,13 @@ table tbody tr:hover {
   background: #2b2b44;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   transition: 0.3s;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
 }
 
 .product-card h3 {
@@ -253,7 +255,7 @@ table tbody tr:hover {
 
 /* About Tab */
 .about-content {
-  background: rgba(43,43,68,0.8);
+  background: rgba(43, 43, 68, 0.8);
   padding: 20px;
   border-radius: 12px;
 }
@@ -277,9 +279,80 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .sidebar { display: none; }
-  .main-content { padding: 20px; margin: 10px; }
-  .product-form { flex-direction: column; }
-  .product-form button { width: 100%; }
-  .btn-export { width: 100%; }
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .product-form {
+    flex-direction: column;
+  }
+
+  .product-form button {
+    width: 100%;
+  }
+
+  .btn-export {
+    width: 100%;
+  }
+}
+
+/* Modal overlay (centered message) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-box {
+  background: linear-gradient(180deg, #24243a, #1e1e2f);
+  color: #fff;
+  padding: 24px 22px;
+  border-radius: 12px;
+  width: 360px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  text-align: center;
+}
+
+.modal-icon {
+  margin-bottom: 10px;
+}
+
+.modal-message {
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+
+.modal-actions .modal-ok {
+  background: #667eea;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modal-actions .modal-ok:hover {
+  filter: brightness(0.95);
+}
+
+/* small responsive tweak for modal */
+@media (max-width: 480px) {
+  .modal-box {
+    width: 90%;
+    padding: 18px;
+  }
 }
